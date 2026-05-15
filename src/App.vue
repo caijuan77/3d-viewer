@@ -283,9 +283,6 @@ function showHint() {
       <div class="info-bar">
         <span>{{ stats }}</span>
         <span>{{ fileSize }}</span>
-        <span class="spacer"></span>
-        <span><span class="kbd">R</span> reset</span>
-        <span><span class="kbd">W</span> wireframe</span>
       </div>
     </main>
   </div>
@@ -643,10 +640,6 @@ canvas {
   padding: 8px 16px;
 }
 
-.info-bar .spacer {
-  flex: 1;
-}
-
 .overlay {
   position: absolute;
   inset: 0;
@@ -712,17 +705,6 @@ canvas {
 
 .hint.fading {
   opacity: 0;
-}
-
-.kbd {
-  display: inline-block;
-  border: 1px solid #444;
-  border-radius: 3px;
-  background: #2a2a2a;
-  color: #aaa;
-  font-family: monospace;
-  font-size: 10px;
-  padding: 1px 5px;
 }
 
 @media (max-width: 768px) {

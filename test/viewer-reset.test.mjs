@@ -24,3 +24,5 @@ const clearLocalTabsBody = appSource.match(/function clearLocalTabs\(\) \{([\s\S
 
 assert.match(clearLocalTabsBody, /viewer\?\.clear\(\);/);
 assert.match(appSource, /<div v-if="overlay\.loading" class="spinner"><\/div>/);
+assert.doesNotMatch(appSource, /<span><span class="kbd">R<\/span> reset<\/span>/);
+assert.doesNotMatch(appSource, /<span><span class="kbd">W<\/span> wireframe<\/span>/);

@@ -19,6 +19,7 @@ const SAMPLES = [
   { name: 'Duck', fmt: 'DAE', url: 'https://raw.githubusercontent.com/assimp/assimp/master/test/models/Collada/duck.dae' },
   { name: 'Test', fmt: '3DS', url: 'https://raw.githubusercontent.com/assimp/assimp/master/test/models/3DS/test1.3ds' },
 ];
+const DEFAULT_SAMPLE = SAMPLES[0];
 
 const viewerWrap = ref(null);
 const fileInput = ref(null);
@@ -48,6 +49,7 @@ const overlayClasses = computed(() => ({
   error: overlay.error,
 }));
 const uploadLimitReached = computed(() => isModelLimitReached(localTabs.value.length, maxModelTabs));
+const hasActiveModel = computed(() => stats.value !== '—');
 
 onMounted(() => {
   viewer = createModelViewer(viewerWrap.value, {
@@ -56,6 +58,7 @@ onMounted(() => {
     onFileSize: value => { fileSize.value = value; },
     onUrl: value => { urlInput.value = value; },
   });
+  loadSample(DEFAULT_SAMPLE);
   showHint();
 });
 
@@ -144,6 +147,10 @@ function clearLocalTabs() {
   activeLocalTabId.value = '';
   uploadNotice.value = '';
   viewer?.clear();
+}
+
+function closePreview() {
+  clearLocalTabs();
 }
 
 function showHint() {
@@ -241,6 +248,16 @@ function showHint() {
         </button>
       </div>
       <div ref="viewerWrap" class="viewer-wrap" @pointerdown="showHint">
+        <button
+          v-if="hasActiveModel"
+          class="preview-close"
+          type="button"
+          title="Close preview"
+          aria-label="Close preview"
+          @click="closePreview"
+        >
+          ×
+        </button>
         <div v-if="uploadNotice" class="upload-notice">{{ uploadNotice }}</div>
         <div :class="overlayClasses">
           <div v-if="overlay.loading" class="spinner"></div>
@@ -553,6 +570,30 @@ input {
   background:
     radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 42%, rgba(8, 10, 16, 0.42) 77%, rgba(4, 6, 10, 0.82) 100%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.02) 12%, rgba(255, 255, 255, 0) 35%);
+}
+
+.preview-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 6;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.48);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.preview-close:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+  background: rgba(0, 0, 0, 0.68);
+  color: #fff;
 }
 
 canvas {

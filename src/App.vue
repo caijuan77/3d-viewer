@@ -25,7 +25,6 @@ const fileInput = ref(null);
 const urlInput = ref('');
 const stats = ref('—');
 const fileSize = ref('');
-const wireframe = ref(false);
 const dragOver = ref(false);
 const hintFading = ref(false);
 const localTabs = ref([]);
@@ -56,15 +55,11 @@ onMounted(() => {
     onStats: value => { stats.value = value; },
     onFileSize: value => { fileSize.value = value; },
     onUrl: value => { urlInput.value = value; },
-    onWireframe: value => { wireframe.value = value; },
   });
-
-  window.addEventListener('keydown', onKeydown);
   showHint();
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener('keydown', onKeydown);
   clearTimeout(hintTimer);
   viewer?.dispose();
 });
@@ -149,21 +144,6 @@ function clearLocalTabs() {
   activeLocalTabId.value = '';
   uploadNotice.value = '';
   viewer?.clear();
-}
-
-function resetCamera() {
-  viewer.resetCamera();
-}
-
-function toggleWireframe() {
-  viewer.toggleWireframe();
-}
-
-function onKeydown(event) {
-  const tagName = event.target?.tagName;
-  if (tagName === 'INPUT' || tagName === 'TEXTAREA') return;
-  if (event.key === 'r' || event.key === 'R') resetCamera();
-  if (event.key === 'w' || event.key === 'W') toggleWireframe();
 }
 
 function showHint() {
@@ -260,13 +240,6 @@ function showHint() {
           Clear
         </button>
       </div>
-      <div class="toolbar">
-        <button type="button" title="Reset camera (R)" @click="resetCamera">↺ Reset</button>
-        <button type="button" :class="{ active: wireframe }" title="Toggle wireframe (W)" @click="toggleWireframe">
-          ◌ Wireframe
-        </button>
-      </div>
-
       <div ref="viewerWrap" class="viewer-wrap" @pointerdown="showHint">
         <div v-if="uploadNotice" class="upload-notice">{{ uploadNotice }}</div>
         <div :class="overlayClasses">
@@ -514,29 +487,6 @@ input {
   flex: 1;
   flex-direction: column;
   background: #222731;
-}
-
-.toolbar {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  z-index: 5;
-  display: flex;
-  gap: 6px;
-}
-
-.toolbar button {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #ccc;
-  font-size: 12px;
-  padding: 6px 12px;
-}
-
-.toolbar button:hover,
-.toolbar button.active {
-  background: rgba(255, 255, 255, 0.12);
 }
 
 .model-tabs {

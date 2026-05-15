@@ -26,3 +26,6 @@ assert.match(clearLocalTabsBody, /viewer\?\.clear\(\);/);
 assert.match(appSource, /<div v-if="overlay\.loading" class="spinner"><\/div>/);
 assert.doesNotMatch(appSource, /<span><span class="kbd">R<\/span> reset<\/span>/);
 assert.doesNotMatch(appSource, /<span><span class="kbd">W<\/span> wireframe<\/span>/);
+assert.doesNotMatch(appSource, /class="toolbar"/);
+assert.doesNotMatch(appSource, /Reset camera/);
+assert.doesNotMatch(appSource, /Toggle wireframe/);
